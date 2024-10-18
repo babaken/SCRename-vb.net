@@ -455,7 +455,7 @@ Module SCRename
 				If i > 0 Then
 					Threading.Thread.Sleep(1000)
 				End If
-				Dim URL As String = "http://cal.syoboi.jp/rss2.php?start=" + str1.ToString() + "&days=" + (days + 1).ToString() + "&usr=babaken4&titlefmt=$(Title)|$(ChName)|$(EdTime)|$(SubTitleB)"
+				Dim URL As String = "http://cal.syoboi.jp/rss2.php?start=" + str1.ToString() + "&days=" + (days + 1).ToString() + "&usr=SCRename&titlefmt=$(Title)|$(ChName)|$(EdTime)|$(SubTitleB)"
 				objHTTP.Open("Get", URL, False)
 				objHTTP.Send
 				If objHTTP.Status >= 200 And objHTTP.Status < 300 Then
