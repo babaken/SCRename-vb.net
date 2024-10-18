@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.34931.43
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SCRename", "SCRename\SCRename.vbproj", "{6064A288-13D8-4502-9EAA-D0CC8A3D824A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{418FE335-DC9D-403B-903C-5E9C956070D7}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6064A288-13D8-4502-9EAA-D0CC8A3D824A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6064A288-13D8-4502-9EAA-D0CC8A3D824A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6064A288-13D8-4502-9EAA-D0CC8A3D824A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6064A288-13D8-4502-9EAA-D0CC8A3D824A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F4DD652F-F723-4E62-8B19-0F0FA0FE4EC2}
+	EndGlobalSection
+EndGlobal
