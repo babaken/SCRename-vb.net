@@ -18,6 +18,7 @@
     <VerifyUploadedFiles>false</VerifyUploadedFiles>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <StartArguments>"D:\ENCODE\Check\20241024003000_アクロトリップ 4「ずぶぬれレイニーデイ」_「魔法少女をもっと輝かせたい・・・強いてくれ、苦戦を！」その欲望？が、内気な少女を悪の路に導いてゆく―。 _BS日テレ.ts" "%24SCtitle%24_%24SCpart%24%24SCnumber%24_「%24SCsubtitle%24」%28%24SCservice%24%29" 0 6</StartArguments>
+    <StartArguments>
+    </StartArguments>
   </PropertyGroup>
 </Project>
