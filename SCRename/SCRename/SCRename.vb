@@ -1,5 +1,6 @@
 ﻿Imports System
 Imports System.Text
+Imports System.Xml
 
 
 Module SCRename
@@ -35,6 +36,8 @@ Module SCRename
 		Dim char9() As String = str9.Split(" ")
 		Dim char10() As String = str10.Split(" ")
 		Dim char11() As String = str11.Split(" ")
+		Dim xmlFilePath As String = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SCRename.xml")
+
 
 		'引数処理
 		For Each str1 In CmdArgs
@@ -81,6 +84,15 @@ Module SCRename
 			Environment.Exit(1)
 		End If
 		Console.WriteLine("起動時処理終了")
+
+		'しょぼかるユーザ名取得
+		Dim xmlDoc As New XmlDocument()
+		xmlDoc.Load(xmlFilePath)
+		Dim usrNode As XmlNode = xmlDoc.SelectSingleNode("/config/settings/setting[@name='usr']")
+		If usrNode IsNot Nothing Then
+			Console.WriteLine("user: " & usrNode.InnerText)
+		End If
+		Console.WriteLine("しょぼかるユーザ名取得終了")
 
 		'実体名最大文字数取得
 		elen = 0
@@ -476,7 +488,7 @@ Module SCRename
 				If i > 0 Then
 					Threading.Thread.Sleep(1000)
 				End If
-				Dim URL As String = "http://cal.syoboi.jp/rss2.php?start=" + str1.ToString() + "&days=" + (days + 1).ToString() + "&usr=SCRename&titlefmt=$(Title)|$(ChName)|$(EdTime)|$(SubTitleB)"
+				Dim URL As String = "http://cal.syoboi.jp/rss2.php?start=" + str1.ToString() + "&days=" + (days + 1).ToString() + "&usr=" + usrNode.InnerText + "&titlefmt=$(Title)|$(ChName)|$(EdTime)|$(SubTitleB)"
 				objHTTP.Open("Get", URL, False)
 				objHTTP.Send
 				If objHTTP.Status >= 200 And objHTTP.Status < 300 Then

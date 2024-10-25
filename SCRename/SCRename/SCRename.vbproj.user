@@ -1,7 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <StartArguments>"D:\ENCODE\Check\202410182230_ダンダダン #03  _ＡＴ－Ｘ.ts"  "%24SCtitle%24_%24SCpart%24%24SCnumber%24_「%24SCsubtitle%24」%28%24SCservice%24%29" 0 6</StartArguments>
+    <StartArguments>"D:\media-autobuild_suite\msys64\home\babaken\ENCODE\Check\20241024233000_嘆きの亡霊は引退したい 04 _04 謎の仮面は戦闘したい _AT-X.ts" "%24SCtitle%24_%24SCpart%24%24SCnumber%24_「%24SCsubtitle%24」%28%24SCservice%24%29" 0 5</StartArguments>
+    <StartAction>Project</StartAction>
+    <StartProgram>C:\msys64\mingw64.exe</StartProgram>
+    <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
   </PropertyGroup>
   <PropertyGroup>
     <PublishUrlHistory>publish\</PublishUrlHistory>
@@ -12,5 +15,8 @@
     <ErrorReportUrlHistory />
     <FallbackCulture>ja-JP</FallbackCulture>
     <VerifyUploadedFiles>false</VerifyUploadedFiles>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <StartArguments>"D:\ENCODE\Check\20241024003000_アクロトリップ 4「ずぶぬれレイニーデイ」_「魔法少女をもっと輝かせたい・・・強いてくれ、苦戦を！」その欲望？が、内気な少女を悪の路に導いてゆく―。 _BS日テレ.ts" "%24SCtitle%24_%24SCpart%24%24SCnumber%24_「%24SCsubtitle%24」%28%24SCservice%24%29" 0 6</StartArguments>
   </PropertyGroup>
 </Project>
