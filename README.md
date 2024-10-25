@@ -14,7 +14,7 @@ VBSが廃止されるらしいのでSCRenameをVB.NETにマイグレーション
 3. あとは手直し
 
 ## 追加対応分
-・SyobocalのユーザをXMLで指定できるように修正
+* SyobocalのユーザをXMLで指定できるように修正
 
 ## マイグレーション元のReadmeより
 
