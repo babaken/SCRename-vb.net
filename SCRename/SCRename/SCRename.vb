@@ -1,11 +1,126 @@
 ﻿Imports System
+Imports System.Runtime.InteropServices.ComTypes
 Imports System.Text
 Imports System.Xml
 
-
 Module SCRename
+
+	''' <summary>
+	''' エラーメッセージ表示
+	''' </summary>
+	''' <param name="prm"></param>
+	''' <param name="message"></param>
+	Sub ErrGuidance(prm As String, message As String)
+		If prm <> "" Then
+			Console.WriteLine(prm)
+		End If
+		Console.Error.WriteLine(message)
+		Threading.Thread.Sleep(1000)
+	End Sub
+
+	''' <summary>
+	''' フォーマットに値をセット
+	''' </summary>
+	''' <param name="prm"></param>
+	''' <returns></returns>
+	Function SetFmt(prm() As String) As String
+		Dim fmt = prm(0)
+		Dim StartDate = DateTime.Parse(prm(1))
+		Dim EndDate = DateTime.Parse(prm(2))
+		Dim number1 = prm(3)
+		Dim number2 = prm(4)
+		Dim number3 = prm(5)
+		Dim number4 = prm(6)
+		Dim part = prm(7)
+		Dim title = prm(8)
+		Dim title2 = prm(9)
+		Dim subtitle = prm(10)
+		Dim chan = prm(11)
+		Dim StartDateDash = DateTime.Parse(prm(12))
+		Dim StartHH = Integer.Parse(prm(13))
+		Dim EndDateDash = DateTime.Parse(prm(14))
+		Dim EndHH = Integer.Parse(prm(15))
+		Dim char11() As String = prm(16).Split(" ")
+		Dim tmpfmt As String
+
+		'StartDate
+		tmpfmt = (fmt).Replace("$SCnumber1$", number1)
+		fmt = (tmpfmt).Replace("$SCnumber$", number2)
+		tmpfmt = (fmt).Replace("$SCnumber2$", number2)
+		fmt = (tmpfmt).Replace("$SCnumber3$", number3)
+		tmpfmt = (fmt).Replace("$SCnumber4$", number4)
+		fmt = (tmpfmt).Replace("$SCdate$", Right(CStr(Year(StartDate)), 2) + Right("0" + Month(StartDate), 2) + Right("0" + Day(StartDate), 2))
+		tmpfmt = (fmt).Replace("$SCdate2$", Year(StartDate) + Right("0" + Month(StartDate), 2) + Right("0" + Day(StartDate), 2))
+		fmt = (tmpfmt).Replace("$SCyear$", Right(CStr(Year(StartDate)), 2))
+		tmpfmt = (fmt).Replace("$SCyear2$", Year(StartDate))
+		fmt = (tmpfmt).Replace("$SCmonth$", Right("0" + Month(StartDate), 2))
+		tmpfmt = (fmt).Replace("$SCday$", Right("0" + Day(StartDate), 2))
+		fmt = (tmpfmt).Replace("$SCquarter$", DatePart("q", StartDate))
+		tmpfmt = (fmt).Replace("$SCweek$", WeekdayName(Weekday(StartDate), True))
+		fmt = (tmpfmt).Replace("$SCweek2$", char11(Weekday(StartDate) - 1))
+		tmpfmt = (fmt).Replace("$SCweek3$", (char11(Weekday(StartDate) - 1).ToUpper()))
+		fmt = (tmpfmt).Replace("$SCtime$", Right("0" + Hour(StartDate), 2) + Right("0" + Minute(StartDate), 2))
+		tmpfmt = (fmt).Replace("$SCtime2$", Right("0" + Hour(StartDate), 2) + Right("0" + Minute(StartDate), 2) + Right("0" + Second(StartDate), 2))
+		fmt = (tmpfmt).Replace("$SChour$", Right("0" + Hour(StartDate), 2))
+		tmpfmt = (fmt).Replace("$SCminute$", Right("0" + Minute(StartDate), 2))
+		fmt = (tmpfmt).Replace("$SCsecond$", Right("0" + Second(StartDate), 2))
+
+		StartDate = StartDateDash
+		tmpfmt = (fmt).Replace("$SCdates$", Right(CStr(Year(StartDate)), 2) + Right("0" + Month(StartDate), 2) + Right("0" + Day(StartDate), 2))
+		fmt = (tmpfmt).Replace("$SCdate2s$", Year(StartDate) + Right("0" + Month(StartDate), 2) + Right("0" + Day(StartDate), 2))
+		tmpfmt = (fmt).Replace("$SCyears$", Right(CStr(Year(StartDate)), 2))
+		fmt = (tmpfmt).Replace("$SCyear2s$", Year(StartDate))
+		tmpfmt = (fmt).Replace("$SCmonths$", Right("0" + Month(StartDate), 2))
+		fmt = (tmpfmt).Replace("$SCdays$", Right("0" + Day(StartDate), 2))
+		tmpfmt = (fmt).Replace("$SCquarters$", DatePart("q", StartDate))
+		fmt = (tmpfmt).Replace("$SCweeks$", WeekdayName(Weekday(StartDate), True))
+		tmpfmt = (fmt).Replace("$SCweek2s$", char11(Weekday(StartDate) - 1))
+		fmt = (tmpfmt).Replace("$SCweek3s$", (char11(Weekday(StartDate) - 1).ToUpper()))
+		tmpfmt = (fmt).Replace("$SCtimes$", Right("0" + StartHH, 2) + Right("0" + Minute(StartDate), 2))
+		fmt = (tmpfmt).Replace("$SCtime2s$", Right("0" + StartHH, 2) + Right("0" + Minute(StartDate), 2) + Right("0" + Second(StartDate), 2))
+		tmpfmt = (fmt).Replace("$SChours$", Right("0" + StartHH, 2))
+
+		'EndDate
+		fmt = (tmpfmt).Replace("$SCeddate$", Right(CStr(Year(EndDate)), 2) + Right("0" + Month(EndDate), 2) + Right("0" + Day(EndDate), 2))
+		tmpfmt = (fmt).Replace("$SCeddate2$", Year(EndDate) + Right("0" + Month(EndDate), 2) + Right("0" + Day(EndDate), 2))
+		fmt = (tmpfmt).Replace("$SCedyear$", Right(CStr(Year(EndDate)), 2))
+		tmpfmt = (fmt).Replace("$SCedyear2$", Year(EndDate))
+		fmt = (tmpfmt).Replace("$SCedmonth$", Right("0" + Month(EndDate), 2))
+		tmpfmt = (fmt).Replace("$SCedday$", Right("0" + Day(EndDate), 2))
+		fmt = (tmpfmt).Replace("$SCedquarter$", DatePart("q", EndDate))
+		tmpfmt = (fmt).Replace("$SCedweek$", WeekdayName(Weekday(EndDate), True))
+		fmt = (tmpfmt).Replace("$SCedweek2$", char11(Weekday(EndDate) - 1))
+		tmpfmt = (fmt).Replace("$SCedweek3$", (char11(Weekday(EndDate) - 1).ToUpper()))
+		fmt = (tmpfmt).Replace("$SCedtime$", Right("0" + Hour(EndDate), 2) + Right("0" + Minute(EndDate), 2))
+		tmpfmt = (fmt).Replace("$SCedtime2$", Right("0" + Hour(EndDate), 2) + Right("0" + Minute(EndDate), 2) + Right("0" + Second(EndDate), 2))
+		fmt = (tmpfmt).Replace("$SCedhour$", Right("0" + Hour(EndDate), 2))
+		tmpfmt = (fmt).Replace("$SCedminute$", Right("0" + Minute(EndDate), 2))
+		fmt = (tmpfmt).Replace("$SCedsecond$", Right("0" + Second(EndDate), 2))
+
+		EndDate = EndDateDash
+		tmpfmt = (fmt).Replace("$SCeddates$", Right(CStr(Year(EndDate)), 2) + Right("0" + Month(EndDate), 2) + Right("0" + Day(EndDate), 2))
+		fmt = (tmpfmt).Replace("$SCeddate2s$", Year(EndDate) + Right("0" + Month(EndDate), 2) + Right("0" + Day(EndDate), 2))
+		tmpfmt = (fmt).Replace("$SCedyears$", Right(CStr(Year(EndDate)), 2))
+		fmt = (tmpfmt).Replace("$SCedyear2s$", Year(EndDate))
+		tmpfmt = (fmt).Replace("$SCedmonths$", Right("0" + Month(EndDate), 2))
+		fmt = (tmpfmt).Replace("$SCeddays$", Right("0" + Day(EndDate), 2))
+		tmpfmt = (fmt).Replace("$SCedquarters$", DatePart("q", EndDate))
+		fmt = (tmpfmt).Replace("$SCedweeks$", WeekdayName(Weekday(EndDate), True))
+		tmpfmt = (fmt).Replace("$SCedweek2s$", char11(Weekday(EndDate) - 1))
+		fmt = (tmpfmt).Replace("$SCedweek3s$", (char11(Weekday(EndDate) - 1).ToUpper()))
+		tmpfmt = (fmt).Replace("$SCedtimes$", Right("0" + EndHH, 2) + Right("0" + Minute(EndDate), 2))
+		fmt = (tmpfmt).Replace("$SCedtime2s$", Right("0" + EndHH, 2) + Right("0" + Minute(EndDate), 2) + Right("0" + Second(EndDate), 2))
+		tmpfmt = (fmt).Replace("$SCedhours$", Right("0" + EndHH, 2))
+		fmt = (tmpfmt).Replace("$SCservice$", chan)
+		tmpfmt = (fmt).Replace("$SCpart$", part)
+		fmt = (tmpfmt).Replace("$SCtitle$", title)
+		tmpfmt = (fmt).Replace("$SCtitle2$", title2)
+		fmt = (tmpfmt).Replace("$SCsubtitle$", subtitle)
+
+		Return fmt
+	End Function
+
 	Sub Main(ByVal CmdArgs() As String)
-		'SCRename Ver. 6.0
 		Console.WriteLine("======================================")
 		Console.WriteLine("SCRename Ver. 6.0")
 		Console.WriteLine("======================================")
@@ -20,14 +135,40 @@ Module SCRename
 		Const char5 As String = ")]）〕］｝〉》」】＞"
 		Const char6 As String = "/:*?!""<>|"
 		Const char7 As String = ChrW(&H2215) & ChrW(&HFF1A) & ChrW(&HFF0A) & ChrW(&HFF1F) & ChrW(&HFF01) & ChrW(&H201D) & ChrW(&HFF1C) & ChrW(&HFF1E) & ChrW(&HFF5C)
-		Dim i As Object, j As Object, k As Object, l As Object, argc As Integer, opt As Object, elen As Object, days As Object, pos As Object, serv As Object
-		Dim str1 As Object, str2 As Object, path As Object, rpath As Object, ext As Object, title As Object, title2 As Object, ftitle As Object, number As Object, number1 As Object, number2 As Object, number3 As Object, number4 As Object, part As Object, subtitle As Object
-		Dim yr As Object, mon As Object, dy As Object, hr As Object, min As Object, sec As Object
-		Dim dt1 As Date?, dt2 As Date?, tgtdt As Date?, stdt As Date?, eddt As Date?
-		Dim dtflag As Object
+		Dim i As Object
+		Dim j As Object
+		Dim k As Integer = 0
+		Dim l As Object
+		Dim argc As Integer
+		Dim opt As Integer = 0
+		Dim elen As Object
+		Dim days As Object
+		Dim pos As Integer = 0
+		Dim serv As Integer = 0
+		Dim str1 As Object
+		Dim str2 As Object
+		Dim rpath As String = ""
+		Dim ext As String = ""
+		Dim title As Object
+		Dim title2 As String = ""
+		Dim ftitle As Object
+		Dim Number As String = ""
+		Dim number1 As String = ""
+		Dim number2 As String = ""
+		Dim number3 As String = ""
+		Dim number4 As String = ""
+		Dim part As String = ""
+		Dim subtitle As String = ""
+		Dim yr As Object
+		Dim dt1 As Date?
+		Dim dt2 As Date?
+		Dim tgtdt As Date?
+		Dim StartDate As Date?
+		Dim EndDate As Date?
+		Dim dtflag As Integer = 0
 		Dim service(,) As String
 		Dim tid(,) As String
-		Dim objFSO As Object, objFile As Object, objHTTP As Object
+		Dim objFile As Object, objHTTP As Object
 		Dim str8 As String = "I II III IV V VI VII VIII IX X"
 		Dim str9 As String = "quot amp #039 lt gt"
 		Dim str10 As String = ChrW(&H201C) & " & " & Chr(39) & " ＜ ＞"
@@ -37,30 +178,44 @@ Module SCRename
 		Dim char10() As String = str10.Split(" ")
 		Dim char11() As String = str11.Split(" ")
 		Dim xmlFilePath As String = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SCRename.xml")
-
+		Dim objFSO As Object = Activator.CreateInstance(Type.GetTypeFromProgID("Scripting.FileSystemObject"))
+		Dim prm As String
+		Dim msg As String
+		Dim counter As Integer
+		Dim ilinecount As Integer = 0
+		Dim path As Object = Left(System.Reflection.Assembly.GetExecutingAssembly().Location, InStrRev(System.Reflection.Assembly.GetExecutingAssembly().Location, "\"))
+		Dim excpath As String = path + "SCRename.exc"
+		Dim srvpath As String = path + "SCRename.srv"
+		Dim rp1path As String = path + "SCRename.rp1"
+		Dim tidpath As String = path + "SCRename.tid"
+		Dim rp2path As String = path + "SCRename.rp2"
+		Dim CreateDate As Object
+		Dim ModifieDate As Object
+		Dim outputfile As String = ""
+		Dim fmt As String = ""
 
 		'引数処理
-		For Each str1 In CmdArgs
-			str1 = str1.Replace("""", "")
-			If (str1).ToLower() = "-h" Or str1 = "-?" Then
+		For Each prm In CmdArgs
+			prm = prm.Replace("""", "")
+			If (prm).ToLower() = "-h" Or prm = "-?" Then
 				Console.WriteLine(Environment.NewLine & "SCRename.vbs [オプション] ファイル リネーム書式")
 				Console.WriteLine(" [タイトル開始位置] [検索文字数]" & Environment.NewLine)
 				Environment.Exit(1)
-			ElseIf (str1).ToLower() = "-t" Then
+			ElseIf (prm).ToLower() = "-t" Then
 				opt = opt Or 1
-			ElseIf (str1).ToLower() = "-n" Then
+			ElseIf (prm).ToLower() = "-n" Then
 				opt = opt Or 2
-			ElseIf (str1).ToLower() = "-f" Then
+			ElseIf (prm).ToLower() = "-f" Then
 				opt = opt Or 4
-			ElseIf (str1).ToLower() = "-s" Then
+			ElseIf (prm).ToLower() = "-s" Then
 				opt = opt Or 8
-			ElseIf (str1).ToLower() = "-a" Then
+			ElseIf (prm).ToLower() = "-a" Then
 				opt = opt Or 16
-			ElseIf (str1).ToLower() = "-a1" Then
+			ElseIf (prm).ToLower() = "-a1" Then
 				opt = opt Or 32
 			Else
 				ReDim Preserve CmdArgs(argc)
-				CmdArgs(argc) = str1
+				CmdArgs(argc) = prm
 				argc = argc + 1
 			End If
 		Next
@@ -69,18 +224,16 @@ Module SCRename
 		Threading.Thread.Sleep(1000)
 		Console.Error.WriteLine(Environment.NewLine + "SCRename 動作中..." + Environment.NewLine)
 		If argc < 2 Then
-			Console.WriteLine(CmdArgs(0))
-			Console.Error.WriteLine("パラメータが足りません。")
-			Threading.Thread.Sleep(1000)
+			msg = "パラメータが足りません。"
+			ErrGuidance(CmdArgs(0), msg)
 			Environment.Exit(1)
 		ElseIf CmdArgs(0) = "" Then
-			Console.Error.WriteLine("処理対象のファイルが指定されていません。")
-			Threading.Thread.Sleep(1000)
+			msg = "処理対象のファイルが指定されていません。"
+			ErrGuidance("", msg)
 			Environment.Exit(1)
 		ElseIf CmdArgs(1) = "" Then
-			Console.WriteLine(CmdArgs(0))
-			Console.Error.WriteLine("リネーム書式が指定されていません。")
-			Threading.Thread.Sleep(1000)
+			msg = "リネーム書式が指定されていません。"
+			ErrGuidance(CmdArgs(0), msg)
 			Environment.Exit(1)
 		End If
 		Console.WriteLine("起動時処理終了")
@@ -96,8 +249,8 @@ Module SCRename
 
 		'実体名最大文字数取得
 		elen = 0
-		For i = 0 To UBound(char9)
-			j = Len(char9(i))
+		For counter = 0 To UBound(char9)
+			j = Len(char9(counter))
 			If j > elen Then
 				elen = j
 			End If
@@ -106,24 +259,21 @@ Module SCRename
 		Console.WriteLine("実体名最大文字数取得終了")
 
 		'SCRename.exc 読み込み
-		path = Left(System.Reflection.Assembly.GetExecutingAssembly().Location, InStrRev(System.Reflection.Assembly.GetExecutingAssembly().Location, "\"))
-		str1 = path + "SCRename.exc"
-		objFSO = Activator.CreateInstance(Type.GetTypeFromProgID("Scripting.FileSystemObject"))
-		If objFSO.FileExists(str1) Then
-			objFile = objFSO.OpenTextFile(str1, 1, False, -2)
+		If objFSO.FileExists(excpath) Then
+			objFile = objFSO.OpenTextFile(excpath, 1, False, -2)
 			Do While Not objFile.AtEndOfStream
-				str1 = objFile.ReadLine
-				If Left(str1, 1) <> ":" Then
-					If InStr((CmdArgs(0).ToUpper()), (str1).ToUpper()) > 0 Then
-						i = -1
+				excpath = objFile.ReadLine
+				If Left(excpath, 1) <> ":" Then
+					If InStr((CmdArgs(0).ToUpper()), (excpath).ToUpper()) > 0 Then
+						counter = -1
 					End If
 				End If
 			Loop
 			objFile.Close
 			objFile = Nothing
-			If i < 0 Then
-				Console.WriteLine(CmdArgs(0))
-				Console.Error.WriteLine("対象外のファイルのため処理しませんでした。")
+			If counter < 0 Then
+				msg = "対象外のファイルのため処理しませんでした。"
+				ErrGuidance(CmdArgs(0), msg)
 				Environment.Exit(1)
 			End If
 		End If
@@ -132,37 +282,34 @@ Module SCRename
 		'リネーム元ファイル存在確認
 		If (opt And 1) = 0 Then
 			If Not objFSO.FileExists(CmdArgs(0)) Then
-				Console.Error.WriteLine(CmdArgs(0) + " がありません。")
-				Threading.Thread.Sleep(1000)
+				msg = CmdArgs(0) + " がありません。"
+				ErrGuidance("", msg)
 				Environment.Exit(1)
 			End If
 		End If
 		Console.WriteLine("リネーム元ファイル存在確認終了")
 
 		'SCRename.srv 読み込み
-		str1 = path + "SCRename.srv"
-		objFile = objFSO.OpenTextFile(str1, 1, False, -2)
+		objFile = objFSO.OpenTextFile(srvpath, 1, False, -2)
 		If Err.Number <> 0 Then
-			Console.WriteLine(CmdArgs(0))
-			Console.Error.WriteLine(str1 + " がありません。")
-			Threading.Thread.Sleep(1000)
+			msg = srvpath + " がありません。"
+			ErrGuidance(CmdArgs(0), msg)
 			Environment.Exit(1)
 		End If
 		i = 0
-		Dim ilinecount As Integer = 0
 		Do While Not objFile.AtEndOfStream
-			str1 = objFile.ReadLine
-			If Left(str1, 1) <> ":" Then
+			srvpath = objFile.ReadLine
+			If Left(srvpath, 1) <> ":" Then
 				ReDim Preserve service(3, ilinecount)
 				ilinecount = ilinecount + 1
 				j = 0
 				k = 0
 				Do While j < 4
-					l = InStr(k + 1, str1, ",")
+					l = InStr(k + 1, srvpath, ",")
 					If l > 0 Then
-						service(j, i) = Mid(str1, k + 1, l - k - 1)
+						service(j, i) = Mid(srvpath, k + 1, l - k - 1)
 					Else
-						service(j, i) = Mid(str1, k + 1)
+						service(j, i) = Mid(srvpath, k + 1)
 						Exit Do
 					End If
 					k = l
@@ -273,17 +420,17 @@ Module SCRename
 			End If
 		End If
 		If dtflag = 0 And objFSO.FileExists(CmdArgs(0)) Then
-			dt1 = objFSO.GetFile(CmdArgs(0)).DateCreated
-			dt2 = objFSO.GetFile(CmdArgs(0)).DateLastModified
-			If dt1 < dt2 Then
-				dt2 = dt1
+			CreateDate = objFSO.GetFile(CmdArgs(0)).DateCreated
+			ModifieDate = objFSO.GetFile(CmdArgs(0)).DateLastModified
+			If CreateDate < ModifieDate Then
+				ModifieDate = CreateDate
 				dtflag = 1
 			End If
 			If tgtdt Is Nothing Then
-				tgtdt = dt2
+				tgtdt = ModifieDate
 				days = 7
 			Else
-				tgtdt = tgtdt + New TimeSpan(Hour(dt2), Minute(dt2), Second(dt2))
+				tgtdt = tgtdt + New TimeSpan(Hour(ModifieDate), Minute(ModifieDate), Second(ModifieDate))
 			End If
 		End If
 		If tgtdt Is Nothing Then
@@ -298,15 +445,14 @@ Module SCRename
 		Console.WriteLine("ファイル名先頭部分削除終了")
 
 		'SCRename.rp1 読み込み＆ファイル名置換
-		str1 = path + "SCRename.rp1"
-		If objFSO.FileExists(str1) Then
-			objFile = objFSO.OpenTextFile(str1, 1, False, -2)
+		If objFSO.FileExists(rp1path) Then
+			objFile = objFSO.OpenTextFile(rp1path, 1, False, -2)
 			Do While Not objFile.AtEndOfStream
-				str1 = objFile.ReadLine
-				If Left(str1, 1) <> ":" Then
-					i = InStr(str1, ",")
+				rp1path = objFile.ReadLine
+				If Left(rp1path, 1) <> ":" Then
+					i = InStr(rp1path, ",")
 					If i > 0 Then
-						title = (title).Replace(Left(str1, i - 1), Mid(str1, i + 1))
+						title = (title).Replace(Left(rp1path, i - 1), Mid(rp1path, i + 1))
 					End If
 				End If
 			Loop
@@ -339,9 +485,8 @@ Module SCRename
 			End If
 			i = i + 1
 			If i > Len(title) Then
-				Console.WriteLine(CmdArgs(0))
-				Console.Error.WriteLine("タイトルを取得出来ませんでした。")
-				Threading.Thread.Sleep(1000)
+				msg = "タイトルを取得出来ませんでした。"
+				ErrGuidance(CmdArgs(0), msg)
 				Environment.Exit(1)
 			End If
 		Loop
@@ -430,37 +575,40 @@ Module SCRename
 		Next
 		If i > 0 Then
 			serv = -1
-			Console.Error.WriteLine("放送局が不明のためすべての放送局を対象にします。")
+			msg = "放送局が不明のためすべての放送局を対象にします。"
+			ErrGuidance("", msg)
 		End If
 		Console.WriteLine("放送局名取得終了")
 
 		'検索開始
 		If (opt And 32) = 0 Then
+			msg = ""
 			If days = 7 Then
-				str1 = "ファイル名から日付が取得できないためファイルの"
+				msg = "ファイル名から日付が取得できないためファイルの"
 				If dtflag = 1 Then
-					str1 = str1 + "作成"
+					msg = msg + "作成"
 				Else
-					str1 = str1 + "更新"
+					msg = msg + "更新"
 				End If
-				Console.Error.WriteLine(str1 + "日から一週間遡って、")
+				msg = msg + "日から一週間遡って、" + Environment.NewLine
 			End If
 			If dtflag = 1 Then
-				str1 = "開始"
+				msg = msg + "開始"
 			Else
-				str1 = "終了"
+				msg = msg + "終了"
 			End If
-			Console.Error.WriteLine(str1 + "日時が " + tgtdt + " に最も近い")
+			msg = msg + "日時が " + tgtdt + " に最も近い"
+			ErrGuidance("", msg)
 			If serv < 0 Then
 				str1 = ""
 			Else
 				str1 = "（" + service(1, serv) + "）"
 			End If
-			Console.Error.WriteLine("「" + title + "」" + str1 + "を検索します。" + Environment.NewLine)
+			msg = "「" + title + "」" + str1 + "を検索します。" + Environment.NewLine
+			ErrGuidance("", msg)
 			If Err.Number <> 0 Then
-				Console.WriteLine(CmdArgs(0))
-				Console.Error.WriteLine("検索前処理でエラーが発生しました。")
-				Threading.Thread.Sleep(1000)
+				msg = "検索前処理でエラーが発生しました。"
+				ErrGuidance(CmdArgs(0), msg)
 				Environment.Exit(1)
 			End If
 		End If
@@ -472,9 +620,8 @@ Module SCRename
 			objHTTP = Activator.CreateInstance(Type.GetTypeFromProgID("Microsoft.XMLHTTP"))
 		End If
 		If objHTTP Is Nothing Then
-			Console.WriteLine(CmdArgs(0))
-			Console.Error.WriteLine("XMLHTTP オブジェクトを作成できませんでした。")
-			Threading.Thread.Sleep(1000)
+			msg = "XMLHTTP オブジェクトを作成できませんでした。"
+			ErrGuidance(CmdArgs(0), msg)
 			Environment.Exit(1)
 		End If
 		Console.WriteLine("XMLHTTP オブジェクト作成終了")
@@ -496,9 +643,8 @@ Module SCRename
 				End If
 			Next
 			If i > 2 Then
-				Console.WriteLine(CmdArgs(0))
-				Console.Error.WriteLine("しょぼいカレンダーにアクセスできませんでした。")
-				Threading.Thread.Sleep(1000)
+				msg = "しょぼいカレンダーにアクセスできませんでした。"
+				ErrGuidance(CmdArgs(0), msg)
 				Environment.Exit(1)
 			End If
 			str1 = objHTTP.responseText
@@ -578,26 +724,26 @@ Module SCRename
 					End If
 
 					If dtflag = 1 Then
-						If stdt Is Nothing Then
-							stdt = dt1
-							eddt = dt2
+						If StartDate Is Nothing Then
+							StartDate = dt1
+							EndDate = dt2
 							pos = i
 						End If
-						If Math.Abs(CType(CType((tgtdt - dt1), TimeSpan).Days, SByte)) < Math.Abs(CType(CType((tgtdt - stdt), TimeSpan).Days, SByte)) Then
-							stdt = dt1
-							eddt = dt2
+						If Math.Abs(CType(CType((tgtdt - dt1), TimeSpan).Days, SByte)) < Math.Abs(CType(CType((tgtdt - StartDate), TimeSpan).Days, SByte)) Then
+							StartDate = dt1
+							EndDate = dt2
 							pos = i
 						End If
 
 					Else
-						If eddt Is Nothing Then
-							stdt = dt1
-							eddt = dt2
+						If EndDate Is Nothing Then
+							StartDate = dt1
+							EndDate = dt2
 							pos = i
 						End If
-						If Math.Abs(CType(CType((tgtdt - dt2), TimeSpan).Days, SByte)) < Math.Abs(CType(CType((tgtdt - eddt), TimeSpan).Days, SByte)) Then
-							stdt = dt1
-							eddt = dt2
+						If Math.Abs(CType(CType((tgtdt - dt2), TimeSpan).Days, SByte)) < Math.Abs(CType(CType((tgtdt - EndDate), TimeSpan).Days, SByte)) Then
+							StartDate = dt1
+							EndDate = dt2
 							pos = i
 						End If
 					End If
@@ -636,7 +782,7 @@ Module SCRename
 								Exit For
 							End If
 						Next
-						number = Left(str2, j - 1)
+						Number = Left(str2, j - 1)
 					ElseIf i > 1 Then
 						part = Left(str2, i - 1)
 						part = (part).Trim()
@@ -650,10 +796,10 @@ Module SCRename
 					Do While True
 						j = InStr(i + 1, str2, " ")
 						If j < 1 Then
-							number = number + "," + Mid(str2, i)
+							Number = Number + "," + Mid(str2, i)
 							Exit Do
 						Else
-							number = number + "," + Mid(str2, i, j - i)
+							Number = Number + "," + Mid(str2, i, j - i)
 							i = InStr(j, str2, " / #")
 							If i < 1 Then
 								If j < Len(str2) Then
@@ -666,7 +812,7 @@ Module SCRename
 						End If
 						i = i + 3
 					Loop
-					number = Mid(number, 2)
+					Number = Mid(Number, 2)
 					If subtitle <> "" Then
 						subtitle = Mid(subtitle, 4)
 					End If
@@ -677,10 +823,12 @@ Module SCRename
 		Else
 			'話数検索開始
 			If (opt And 16) > 0 Or (opt And 32) > 0 Then
+				msg = ""
 				If (opt And 32) = 0 Then
-					Console.Error.WriteLine("番組情報が見つかりませんでした。")
+					msg = "番組情報が見つかりませんでした。"
 				End If
-				Console.Error.WriteLine("話数検索を行います。" + Environment.NewLine)
+				msg = msg + "話数検索を行います。" + Environment.NewLine
+				ErrGuidance(CmdArgs(0), msg)
 				k = -1
 				For i = 2 To Len(ftitle) - 2
 					str1 = Mid(ftitle, i, 1)
@@ -707,7 +855,7 @@ Module SCRename
 				If k = -1 Then
 					Console.Error.WriteLine("ファイル名から話数を取得できませんでした。" + Environment.NewLine)
 				Else
-					number = CStr(k)
+					Number = CStr(k)
 					For j = 2 To i - 1
 						If InStr(sep + char4 + char5 + "～", Mid(ftitle, j, 1)) > 0 Then
 							Exit For
@@ -716,25 +864,21 @@ Module SCRename
 					title = (Left(ftitle, j - 1).TrimEnd())
 					title2 = ((title).Replace(" ", "").ToUpper())
 					k = -1
-					str1 = path + "SCRename.tid"
-					If objFSO.FileExists(str1) Then
-						objFile = objFSO.OpenTextFile(str1, 1, False, -2)
+					If objFSO.FileExists(tidpath) Then
+						objFile = objFSO.OpenTextFile(tidpath, 1, False, -2)
 						i = 0
 						Do While Not objFile.AtEndOfStream
 							ReDim Preserve tid(1, i)
-							str1 = objFile.ReadLine
-							j = InStr(str1, ",")
-							tid(0, i) = Left(str1, j - 1)
-							tid(1, i) = Mid(str1, j + 1)
+							tidpath = objFile.ReadLine
+							j = InStr(tidpath, ",")
+							tid(0, i) = Left(tidpath, j - 1)
+							tid(1, i) = Mid(tidpath, j + 1)
 							i = i + 1
 						Loop
 						objFile.Close
 						objFile = Nothing
 						For j = 0 To i - 1
-							'If (Left((tid(0).Replace(j).ToUpper(), " ",""),Len(title2))) = title2 Then
-							'If (Left((tid(0, j)).Replace(" ", "").ToUpper(), ), Len(title2))) = title2 Then
 							If (UCase(tid(0, j).Replace(" ", ""))) = title2 Then
-
 								Console.Error.WriteLine("SCRename.tid から")
 								title = tid(0, j)
 								k = CInt(tid(1, j))
@@ -767,10 +911,8 @@ Module SCRename
 							End If
 						Next
 						If i > 2 Then
-							Console.Error.WriteLine()
-							Console.WriteLine(CmdArgs(0))
-							Console.Error.WriteLine("しょぼいカレンダーにアクセスできませんでした。")
-							Threading.Thread.Sleep(1000)
+							msg = "しょぼいカレンダーにアクセスできませんでした。"
+							ErrGuidance(CmdArgs(0), msg)
 							Environment.Exit(1)
 						End If
 						str1 = objHTTP.responseText
@@ -826,7 +968,7 @@ Module SCRename
 							i = 0
 							j = 0
 							l = 0
-							If objFSO.FileExists(path + "SCRename.tid") Then
+							If objFSO.FileExists(tidpath) Then
 								j = UBound(tid, 2) + 1
 								For i = 0 To j - 1
 									If CInt(tid(1, i)) = k Then
@@ -847,7 +989,7 @@ Module SCRename
 							End If
 							tid(0, i) = title
 							tid(1, i) = CStr(k)
-							objFile = objFSO.OpenTextFile(path + "SCRename.tid", 2, True, -2)
+							objFile = objFSO.OpenTextFile(tidpath, 2, True, -2)
 							For i = 0 To j
 								objFile.WriteLine(tid(0, i) + "," + tid(1, i))
 							Next
@@ -866,22 +1008,22 @@ Module SCRename
 								str2 = "+ChID=" + service(3, serv)
 							End If
 						End If
-						Console.Error.WriteLine("「" + title + "」の TID（" + k + "）を取得しました。")
-						Console.Error.WriteLine("第" + number + "話" + str1 + "の情報を検索します。" + Environment.NewLine)
+						msg = "「" + title + "」の TID（" + k + "）を取得しました。"
+						msg = msg + "第" + Number + "話" + str1 + "の情報を検索します。" + Environment.NewLine
+						ErrGuidance("", msg)
 						For i = 0 To 2
 							If i > 0 Then
 								Threading.Thread.Sleep(1000)
 							End If
-							objHTTP.Open("Get", "http://cal.syoboi.jp/db.php?Command=ProgLookup+TID=" + k + str2 + "+Count=" + number + "+Fields=StTime,EdTime,ChID,STSubTitle+JOIN=SubTitles", False)
+							objHTTP.Open("Get", "http://cal.syoboi.jp/db.php?Command=ProgLookup+TID=" + k + str2 + "+Count=" + Number + "+Fields=StTime,EdTime,ChID,STSubTitle+JOIN=SubTitles", False)
 							objHTTP.Send
 							If objHTTP.Status >= 200 And objHTTP.Status < 300 Then
 								Exit For
 							End If
 						Next
 						If i > 2 Then
-							Console.WriteLine(CmdArgs(0))
-							Console.Error.WriteLine("しょぼいカレンダーにアクセスできませんでした。")
-							Threading.Thread.Sleep(1000)
+							msg = "しょぼいカレンダーにアクセスできませんでした。"
+							ErrGuidance(CmdArgs(0), msg)
 							Environment.Exit(1)
 						End If
 						str1 = objHTTP.responseText
@@ -892,14 +1034,14 @@ Module SCRename
 							'str2 = (Mid(str1).Replace(i, j - i), "-", "/")
 							str2 = Mid(str1, i, j - i).Replace("-", "/")
 							If IsDate(str2) Then
-								stdt = CDate(str2)
+								StartDate = CDate(str2)
 							End If
 							i = InStr(j + 9, str1, "<EdTime>") + 8
 							j = InStr(i, str1, "</EdTime>")
 							'str2 = (Mid(str1).Replace(i, j - i), "-", "/")
 							str2 = Mid(str1, i, j - i).Replace("-", "/")
 							If IsDate(str2) Then
-								eddt = CDate(str2)
+								EndDate = CDate(str2)
 							End If
 							i = InStr(j + 9, str1, "<ChID>") + 6
 							j = InStr(i, str1, "</ChID>")
@@ -936,7 +1078,7 @@ Module SCRename
 									Loop While (j < elen)
 								End If
 							Next
-							number = "#" + number
+							Number = "#" + Number
 							pos = 1
 						End If
 					End If
@@ -948,16 +1090,18 @@ Module SCRename
 			If (opt And 4) = 0 Then
 				Console.WriteLine(CmdArgs(0))
 			End If
-			Console.Error.WriteLine("番組情報が見つかりませんでした。")
+			msg = "番組情報が見つかりませんでした。"
+			ErrGuidance("", msg)
 			If (opt And 4) = 0 Then
 				Threading.Thread.Sleep(1000)
 				Environment.Exit(1)
 			Else
 				'強制リネーム
-				Console.Error.WriteLine("強制リネームを行います。" + Environment.NewLine)
-				number = ""
-				stdt = tgtdt
-				eddt = tgtdt
+				msg = "強制リネームを行います。" + Environment.NewLine
+				ErrGuidance("", msg)
+				Number = ""
+				StartDate = tgtdt
+				EndDate = tgtdt
 				i = InStr(2, ftitle, sep)
 				If i > 1 Then
 					title = Left(ftitle, i - 1)
@@ -1004,18 +1148,18 @@ Module SCRename
 		Console.WriteLine("番組情報取得終了")
 
 		'リネーム書式設定
-		str1 = CmdArgs(1)
-		If number <> "" Then
-			k = Len(number)
+		fmt = CmdArgs(1)
+		If Number <> "" Then
+			k = Len(Number)
 			For i = 1 To k
-				If Mid(number, i, 1) = "#" Then
+				If Mid(Number, i, 1) = "#" Then
 					For j = i + 1 To k
-						If Not IsNumeric(Mid(number, j, 1)) Then
+						If Not IsNumeric(Mid(Number, j, 1)) Then
 							Exit For
 						End If
 					Next
 					If j > i + 1 Then
-						str2 = CStr(CInt(Mid(number, i + 1, j - i - 1)))
+						str2 = CStr(CInt(Mid(Number, i + 1, j - i - 1)))
 						l = Len(str2)
 						Dim strtmp = number1
 						number1 = strtmp + str2
@@ -1037,140 +1181,73 @@ Module SCRename
 					End If
 					i = j - 1
 				Else
-					number2 = number2 + Mid(number, i, 1)
-					number3 = number3 + Mid(number, i, 1)
-					number4 = number4 + Mid(number, i, 1)
+					number2 = number2 + Mid(Number, i, 1)
+					number3 = number3 + Mid(Number, i, 1)
+					number4 = number4 + Mid(Number, i, 1)
 				End If
 			Next
 		End If
-		str1 = (str1).Replace("$SCnumber1$", number1)
-		str1 = (str1).Replace("$SCnumber$", number2)
-		str1 = (str1).Replace("$SCnumber2$", number2)
-		str1 = (str1).Replace("$SCnumber3$", number3)
-		str1 = (str1).Replace("$SCnumber4$", number4)
-		i = Hour(stdt)
-		yr = Year(stdt)
-		mon = Right("0" + Month(stdt), 2)
-		dy = Right("0" + Day(stdt), 2)
-		hr = Right("0" + i, 2)
-		min = Right("0" + Minute(stdt), 2)
-		sec = Right("0" + Second(stdt), 2)
-		str1 = (str1).Replace("$SCdate$", Right(CStr(yr), 2) + mon + dy)
-		str1 = (str1).Replace("$SCdate2$", yr + mon + dy)
-		str1 = (str1).Replace("$SCyear$", Right(CStr(yr), 2))
-		str1 = (str1).Replace("$SCyear2$", yr)
-		str1 = (str1).Replace("$SCmonth$", mon)
-		str1 = (str1).Replace("$SCday$", dy)
-		str1 = (str1).Replace("$SCquarter$", DatePart("q", stdt))
-		j = Weekday(stdt)
-		str1 = (str1).Replace("$SCweek$", WeekdayName(j, True))
-		str1 = (str1).Replace("$SCweek2$", char11(j - 1))
-		str1 = (str1).Replace("$SCweek3$", (char11(j - 1).ToUpper()))
-		str1 = (str1).Replace("$SCtime$", hr + min)
-		str1 = (str1).Replace("$SCtime2$", hr + min + sec)
-		str1 = (str1).Replace("$SChour$", hr)
-		str1 = (str1).Replace("$SCminute$", min)
-		str1 = (str1).Replace("$SCsecond$", sec)
-		If i < 5 Then
-			stdt = DateAdd("d", -1, stdt)
-			i = i + 24
-		End If
-		yr = Year(stdt)
-		mon = Right("0" + Month(stdt), 2)
-		dy = Right("0" + Day(stdt), 2)
-		hr = Right("0" + i, 2)
-		str1 = (str1).Replace("$SCdates$", Right(CStr(yr), 2) + mon + dy)
-		str1 = (str1).Replace("$SCdate2s$", yr + mon + dy)
-		str1 = (str1).Replace("$SCyears$", Right(CStr(yr), 2))
-		str1 = (str1).Replace("$SCyear2s$", yr)
-		str1 = (str1).Replace("$SCmonths$", mon)
-		str1 = (str1).Replace("$SCdays$", dy)
-		str1 = (str1).Replace("$SCquarters$", DatePart("q", stdt))
-		j = Weekday(stdt)
-		str1 = (str1).Replace("$SCweeks$", WeekdayName(j, True))
-		str1 = (str1).Replace("$SCweek2s$", char11(j - 1))
-		str1 = (str1).Replace("$SCweek3s$", (char11(j - 1).ToUpper()))
-		str1 = (str1).Replace("$SCtimes$", hr + min)
-		str1 = (str1).Replace("$SCtime2s$", hr + min + sec)
-		str1 = (str1).Replace("$SChours$", hr)
-		i = Hour(eddt)
-		yr = Year(eddt)
-		mon = Right("0" + Month(eddt), 2)
-		dy = Right("0" + Day(eddt), 2)
-		hr = Right("0" + i, 2)
-		min = Right("0" + Minute(eddt), 2)
-		sec = Right("0" + Second(eddt), 2)
-		str1 = (str1).Replace("$SCeddate$", Right(CStr(yr), 2) + mon + dy)
-		str1 = (str1).Replace("$SCeddate2$", yr + mon + dy)
-		str1 = (str1).Replace("$SCedyear$", Right(CStr(yr), 2))
-		str1 = (str1).Replace("$SCedyear2$", yr)
-		str1 = (str1).Replace("$SCedmonth$", mon)
-		str1 = (str1).Replace("$SCedday$", dy)
-		str1 = (str1).Replace("$SCedquarter$", DatePart("q", eddt))
-		j = Weekday(eddt)
-		str1 = (str1).Replace("$SCedweek$", WeekdayName(j, True))
-		str1 = (str1).Replace("$SCedweek2$", char11(j - 1))
-		str1 = (str1).Replace("$SCedweek3$", (char11(j - 1).ToUpper()))
-		str1 = (str1).Replace("$SCedtime$", hr + min)
-		str1 = (str1).Replace("$SCedtime2$", hr + min + sec)
-		str1 = (str1).Replace("$SCedhour$", hr)
-		str1 = (str1).Replace("$SCedminute$", min)
-		str1 = (str1).Replace("$SCedsecond$", sec)
-		If i < 5 Then
-			eddt = DateAdd("d", -1, eddt)
-			i = i + 24
-		End If
-		yr = Year(eddt)
-		mon = Right("0" + Month(eddt), 2)
-		dy = Right("0" + Day(eddt), 2)
-		hr = Right("0" + i, 2)
-		min = Right("0" + Minute(eddt), 2)
-		sec = Right("0" + Second(eddt), 2)
-		str1 = (str1).Replace("$SCeddates$", Right(CStr(yr), 2) + mon + dy)
-		str1 = (str1).Replace("$SCeddate2s$", yr + mon + dy)
-		str1 = (str1).Replace("$SCedyears$", Right(CStr(yr), 2))
-		str1 = (str1).Replace("$SCedyear2s$", yr)
-		str1 = (str1).Replace("$SCedmonths$", mon)
-		str1 = (str1).Replace("$SCeddays$", dy)
-		str1 = (str1).Replace("$SCedquarters$", DatePart("q", eddt))
-		j = Weekday(eddt)
-		str1 = (str1).Replace("$SCedweeks$", WeekdayName(j, True))
-		str1 = (str1).Replace("$SCedweek2s$", char11(j - 1))
-		str1 = (str1).Replace("$SCedweek3s$", (char11(j - 1).ToUpper()))
-		str1 = (str1).Replace("$SCedtimes$", hr + min)
-		str1 = (str1).Replace("$SCedtime2s$", hr + min + sec)
-		str1 = (str1).Replace("$SCedhours$", hr)
+
+
+		Dim chan As String
 		If serv < 0 Then
-			str2 = ""
+			chan = ""
 		Else
-			str2 = service(2, serv)
+			chan = service(2, serv)
 		End If
-		str1 = (str1).Replace("$SCservice$", str2)
-		str1 = (str1).Replace("$SCpart$", part)
-		str1 = (str1).Replace("$SCtitle$", title)
-		str1 = (str1).Replace("$SCtitle2$", title2)
-		str1 = (str1).Replace("$SCsubtitle$", subtitle)
+
+		Dim param() As String = {}
+		Array.Resize(param, 17)
+		param(0) = fmt
+		param(1) = StartDate.ToString
+		param(2) = EndDate.ToString
+		param(3) = number1
+		param(4) = number2
+		param(5) = number3
+		param(6) = number4
+		param(7) = part
+		param(8) = title.ToString
+		param(9) = title2
+		param(10) = subtitle
+		param(11) = chan
+		Dim StartHH = Hour(StartDate)
+		If StartHH < 5 Then
+			param(12) = DateAdd("d", -1, StartDate).ToString
+			StartHH = StartHH + 24
+		Else
+			param(12) = StartDate.ToString
+		End If
+		param(13) = StartHH.ToString
+		Dim EndHH = Hour(EndDate)
+		If EndHH < 5 Then
+			param(14) = DateAdd("d", -1, EndDate).ToString
+			EndHH = EndHH + 24
+		Else
+			param(14) = EndDate.ToString
+		End If
+		param(15) = EndHH.ToString
+		param(16) = str11
+		fmt = SetFmt(param)
+
 		Console.WriteLine("リネーム書式設定終了")
 
 		'リネーム中止
 		If (opt And 2) > 0 And subtitle = "" Then
-			Console.WriteLine(CmdArgs(0))
-			Console.Error.WriteLine("サブタイトルを取得できなかったため処理を中止しました。")
-			Threading.Thread.Sleep(1000)
+			msg = "サブタイトルを取得できなかったため処理を中止しました。"
+			ErrGuidance(CmdArgs(0), msg)
 			Environment.Exit(1)
 		End If
 		Console.WriteLine("リネーム中止終了")
 
 		'SCRename.rp2 読み込み＆リネーム名置換
-		str2 = path + "SCRename.rp2"
-		If objFSO.FileExists(str2) Then
-			objFile = objFSO.OpenTextFile(str2, 1, False, -2)
+		If objFSO.FileExists(rp2path) Then
+			objFile = objFSO.OpenTextFile(rp2path, 1, False, -2)
 			Do While Not objFile.AtEndOfStream
-				str2 = objFile.ReadLine
-				If Left(str1, 1) <> ":" Then
-					i = InStr(str2, ",")
+				rp2path = objFile.ReadLine
+				If Left(fmt, 1) <> ":" Then
+					i = InStr(rp2path, ",")
 					If i > 0 Then
-						str1 = (str1).Replace(Left(str2, i - 1), Mid(str2, i + 1))
+						fmt = (fmt).Replace(Left(rp2path, i - 1), Mid(rp2path, i + 1))
 					End If
 				End If
 			Loop
@@ -1181,50 +1258,50 @@ Module SCRename
 
 		'使用不可文字置換
 		str2 = ""
-		If Mid(CmdArgs(1), 2, 1) = ":" And Mid(str1, 2, 1) = ":" Then
-			str2 = Left(str1, 2)
-			str1 = Mid(str1, 3)
+		If Mid(CmdArgs(1), 2, 1) = ":" And Mid(fmt, 2, 1) = ":" Then
+			str2 = Left(fmt, 2)
+			fmt = Mid(fmt, 3)
 		End If
 		For i = 1 To Len(char6)
-			str1 = (str1).Replace(Mid(char6, i, 1), Mid(char7, i, 1))
+			fmt = (fmt).Replace(Mid(char6, i, 1), Mid(char7, i, 1))
 		Next
-		str1 = str2 + str1
+		fmt = str2 + fmt
 		Console.WriteLine("使用不可文字置換終了")
 
 		'不要空白削除
 		i = 2
-		Do While i <= Len(str1)
-			i = InStr(i, str1, "\")
+		Do While i <= Len(fmt)
+			i = InStr(i, fmt, "\")
 			If i < 1 Then
 				Exit Do
 			End If
 			For j = i - 1 To 1 Step -1
-				If Mid(str1, j, 1) <> " " Then
+				If Mid(fmt, j, 1) <> " " Then
 					Exit For
 				End If
 			Next
 			If j < i - 1 Then
-				str1 = Left(str1, j) + Mid(str1, i)
+				fmt = Left(fmt, j) + Mid(fmt, i)
 			End If
 			i = i + 1
 		Loop
 		If (opt And 8) = 0 Then
-			str1 = (str1).Trim()
+			fmt = (fmt).Trim()
 			i = 1
-			Do While i <= Len(str1)
-				str2 = Mid(str1, i, 1)
+			Do While i <= Len(fmt)
+				str2 = Mid(fmt, i, 1)
 				If str2 = " " Or str2 = "　" Then
-					For j = i + 1 To Len(str1)
+					For j = i + 1 To Len(fmt)
 						str2 = Mid(str1, j, 1)
 						If str2 <> " " And str2 <> "　" Then
 							Exit For
 						End If
 					Next
-					str2 = Mid(str1, i - 1, 1)
+					str2 = Mid(fmt, i - 1, 1)
 					If str2 = ":" Or str2 = "\" Then
 						i = i - 1
 					End If
-					str1 = Left(str1, i) + Mid(str1, j)
+					fmt = Left(fmt, i) + Mid(fmt, j)
 				End If
 				i = i + 1
 			Loop
@@ -1233,63 +1310,62 @@ Module SCRename
 
 		'フルパス生成
 		i = 0
-		If Left(str1, 2) = "\\" Then
-			i = InStr(4, str1, "\")
+		If Left(fmt, 2) = "\\" Then
+			i = InStr(4, fmt, "\")
 		Else
-			If Left(str1, 1) = "\" And Mid(CmdArgs(0), 2, 1) = ":" Then
-				str1 = Left(CmdArgs(0), 2) + str1
+			If Left(fmt, 1) = "\" And Mid(CmdArgs(0), 2, 1) = ":" Then
+				fmt = Left(CmdArgs(0), 2) + fmt
 				i = 3
-			ElseIf Mid(str1, 2, 1) <> ":" Then
-				str1 = rpath + str1
+			ElseIf Mid(fmt, 2, 1) <> ":" Then
+				outputfile = rpath + fmt
 				i = Len(rpath)
 			End If
 		End If
 
 		'256文字以上ファイルパス削除
 		j = 255 - Len(ext)
-		If Len(str1) > j Then
-			Console.Error.WriteLine("ファイルパスが256文字以上のため切り詰めます。")
-			str1 = Left(str1, j)
+		If Len(outputfile) > j Then
+			msg = "ファイルパスが256文字以上のため切り詰めます。"
+			ErrGuidance("", msg)
+			outputfile = Left(outputfile, j)
 		End If
 
 		'フォルダ作成
 		If (opt And 1) = 0 Then
 			Do
-				i = InStr(i + 2, str1, "\")
+				i = InStr(i + 2, outputfile, "\")
 				If i > 1 Then
-					str2 = Left(str1, i - 1)
+					str2 = Left(outputfile, i - 1)
 					If objFSO.FolderExists(str2) = False Then
 						objFSO.CreateFolder(str2)
 					End If
 				End If
 			Loop While i > 0
 			If Err.Number <> 0 Then
-				Console.WriteLine(CmdArgs(0))
-				Console.Error.WriteLine("フォルダ " + str2 + " を作成できませんでした。")
-				Threading.Thread.Sleep(1000)
+				msg = "フォルダ " + str2 + " を作成できませんでした。"
+				ErrGuidance(CmdArgs(0), msg)
 				Environment.Exit(1)
 			End If
 		End If
 
 		'移動およびリネーム
-		str1 = str1 + ext
+		outputfile = outputfile + ext
 		If (opt And 1) = 0 Then
-			If objFSO.FileExists(str1) Then
+			If objFSO.FileExists(outputfile) Then
 				Console.WriteLine(CmdArgs(0))
-				Console.Error.WriteLine(str1 + " はすでに存在しています。")
-				Threading.Thread.Sleep(1000)
+				msg = outputfile + " はすでに存在しています。"
+				ErrGuidance(CmdArgs(0), msg)
 				Environment.Exit(1)
 			End If
-			objFSO.MoveFile(CmdArgs(0), str1)
+			objFSO.MoveFile(CmdArgs(0), outputfile)
 			If Err.Number <> 0 Then
-				Console.WriteLine(CmdArgs(0))
-				Console.Error.WriteLine("ファイル処理のエラーのため完了できませんでした。")
-				Threading.Thread.Sleep(1000)
+				msg = "ファイル処理のエラーのため完了できませんでした。"
+				ErrGuidance(CmdArgs(0), msg)
 				Environment.Exit(1)
 			End If
 		End If
-		Console.WriteLine(str1)
-		Console.Error.WriteLine("処理が完了しました。")
+		msg = "処理が完了しました。"
+		ErrGuidance(outputfile, msg)
 		Environment.Exit(0)
 	End Sub
 End Module
